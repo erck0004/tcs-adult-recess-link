@@ -18,6 +18,7 @@ from urllib.request import Request, urlopen
 
 APP_DIR = Path("/Users/Assistant/AI/projects/tcs-adult-recess")
 LINK_REPO = Path("/Users/Assistant/AI/projects/tcs-adult-recess-link")
+EXTRA_LINK_REPOS = [Path("/Users/Assistant/AI/projects/TCS")]
 LOG_DIR = Path("/Users/Assistant/AI/logs/tcs-adult-recess")
 RUN_DIR = Path("/Users/Assistant/AI/data/tcs-adult-recess/run")
 CLOUDFLARED = Path("/Users/Assistant/AI/tools/bin/cloudflared")
@@ -166,18 +167,23 @@ def render_index(target: str) -> str:
 '''
 
 
-def update_pages_redirect(target: str) -> None:
-    index = LINK_REPO / "index.html"
+def update_one_pages_redirect(repo: Path, target: str) -> None:
+    index = repo / "index.html"
     new_content = render_index(target)
     if index.exists() and index.read_text() == new_content:
         return
     index.write_text(new_content)
-    run(["git", "add", "index.html"], cwd=LINK_REPO, check=True)
-    status = run(["git", "status", "--porcelain"], cwd=LINK_REPO, check=True).stdout.strip()
+    run(["git", "add", "index.html"], cwd=repo, check=True)
+    status = run(["git", "status", "--porcelain"], cwd=repo, check=True).stdout.strip()
     if not status:
         return
-    run(["git", "commit", "-m", f"Update live tunnel redirect to {target}"], cwd=LINK_REPO, check=True)
-    run(["git", "push"], cwd=LINK_REPO, check=True)
+    run(["git", "commit", "-m", f"Update live tunnel redirect to {target}"], cwd=repo, check=True)
+    run(["git", "push"], cwd=repo, check=True)
+
+
+def update_pages_redirect(target: str) -> None:
+    for repo in [LINK_REPO, *EXTRA_LINK_REPOS]:
+        update_one_pages_redirect(repo, target)
 
 
 def main() -> None:
