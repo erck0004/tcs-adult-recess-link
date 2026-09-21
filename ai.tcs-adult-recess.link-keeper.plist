@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>ai.tcs-adult-recess.link-keeper</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/Assistant/AI/projects/tcs-adult-recess-link/adult_recess_link_keeper.py</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>StartInterval</key>
+  <integer>60</integer>
+
+  <key>StandardOutPath</key>
+  <string>/Users/Assistant/AI/logs/tcs-adult-recess/link-keeper.launchd.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/Assistant/AI/logs/tcs-adult-recess/link-keeper.launchd.err</string>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/Assistant/AI/projects/tcs-adult-recess-link</string>
+</dict>
+</plist>
