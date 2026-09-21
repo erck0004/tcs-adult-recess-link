@@ -135,7 +135,9 @@ def start_tunnel() -> str:
 def ensure_tunnel() -> str:
     tunnel_pid = RUN_DIR / "cloudflared.pid"
     url = latest_tunnel_url()
-    if pid_alive(tunnel_pid) and url:
+    # A quick-tunnel process can stay alive while Cloudflare returns 530 for the
+    # public URL, so verify the actual public route, not just the local PID.
+    if pid_alive(tunnel_pid) and url and http_ok(f"{url}/?key={ACCESS_KEY}", timeout=12):
         return url
     return start_tunnel()
 
